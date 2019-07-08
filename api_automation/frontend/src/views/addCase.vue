@@ -3,9 +3,9 @@
         <!-- <router-link :to="{ name: '接口列表', params: {project_id: this.$route.params.project_id}}" style='text-decoration: none;color: aliceblue;'>
             <el-button class="return-list"><i class="el-icon-d-arrow-left" style="margin-right: 5px"></i>接口列表</el-button>
         </router-link> -->
-        <!-- <router-link :to="{ name: '接口列表', params: {project_id: this.$route.params.project_id}}" style='text-decoration: none;color: aliceblue;'>
+        <!-- <router-link :to="{ name: '接口列表', params: {project_id: this.$route.params.project_id}}" style='text-decoration: none;color: aliceblue;'> -->
             <el-button class="return-list" style="float: right">取消</el-button>
-        </router-link> -->
+        <!-- </router-link> -->
         <el-button class="return-list" type="primary" style="float: right; margin-right: 15px" @click.native="addApiInfo">保存</el-button>
         <el-form :model="form" ref="form" :rules="FormRules">
             <div style="border: 1px solid #e6e6e6;margin-bottom: 10px;padding:15px">
@@ -57,8 +57,8 @@
                             </el-table-column>
                             <el-table-column label="操作" min-width="5%">
                                 <template slot-scope="scope">
-                                    <el-button type="danger" icon="el-icon-delete" style="font-size:20px;cursor:pointer;" @click="delHead(scope.$index)" circle></el-button>
-                                    <!-- <i class="el-icon-delete" style="font-size:25px;cursor:pointer;" @click="delHead(scope.$index)"></i> -->
+                                    <!-- <el-button type="danger" icon="el-icon-delete" style="font-size:20px;cursor:pointer;" @click="delHead(scope.$index)" circle></el-button> -->
+                                    <i class="el-icon-delete" style="font-size:25px;cursor:pointer;" @click="delHead(scope.$index)"></i>
                                 </template>
                             </el-table-column>
                             <el-table-column label="" min-width="10%">
@@ -102,9 +102,9 @@
                             </el-table-column>
                             <el-table-column label="操作" min-width="5%">
                                 <template slot-scope="scope">
-                                    <el-button type="danger" icon="el-icon-delete" style="font-size:20px;cursor:pointer;" @click="delHead(scope.$index)" circle></el-button>
+                                    <!-- <el-button type="danger" icon="el-icon-delete" style="font-size:20px;cursor:pointer;" @click="delHead(scope.$index)" circle></el-button> -->
 
-                                    <!-- <i class="el-icon-delete" style="font-size:30px;cursor:pointer;" @click="delParameter(scope.$index)"></i> -->
+                                    <i class="el-icon-delete" style="font-size:25px;cursor:pointer;" @click="delParameter(scope.$index)"></i>
                                 </template>
                             </el-table-column>
                             <el-table-column label="" min-width="4%">
@@ -143,9 +143,9 @@
                             </el-table-column>
                             <el-table-column label="操作" min-width="5%">
                                 <template slot-scope="scope">
-                                    <el-button type="danger" icon="el-icon-delete" style="font-size:20px;cursor:pointer;" @click="delHead(scope.$index)" circle></el-button>
+                                    <!-- <el-button type="danger" icon="el-icon-delete" style="font-size:20px;cursor:pointer;" @click="delHead(scope.$index)" circle></el-button> -->
 
-                                    <!-- <i class="el-icon-delete" style="font-size:30px;cursor:pointer;" @click="delResponse(scope.$index)"></i> -->
+                                    <i class="el-icon-delete" style="font-size:25px;cursor:pointer;" @click="delResponse(scope.$index)"></i>
                                     
                                 </template>
                             </el-table-column>
@@ -545,7 +545,7 @@
             },
         },
         mounted() {
-            this.getApiGroup();
+            // this.getApiGroup();
             this.fastAdd();
         }
     }
