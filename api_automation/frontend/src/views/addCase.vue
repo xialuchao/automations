@@ -237,11 +237,11 @@
                 activeNames: ['1', '2', '3', '4'],
                 id: "",
                 parameterRaw: "",
-                request3: true,
+                // request3: true,
                 form: {
-                    apiGroupLevelFirst_id: '',
+                    // apiGroupLevelFirst_id: '',
                     name: '',
-                    status: true,
+                    // status: true,
                     requestType: 'POST',
                     httpType: 'HTTP',
                     apiAddress: '',
@@ -252,15 +252,15 @@
                     requestParameterType: "",
                     responseList: [{name: "", value: "", _type:"String", required:true, description: ""},
                         {name: "", value: "", _type:"String", required:true, description: ""}],
-                    mockCode: '',
-                    data: '',
+                    // mockCode: '',
+                    // data: '',
                 },
                 FormRules: {
                     name : [{ required: true, message: '请输入名称', trigger: 'blur' },
                         { max: 50, message: '不能超过50个字', trigger: 'blur' }],
                     apiAddress : [{ required: true, message: '请输入地址', trigger: 'blur' }],
-                    required : [{ type: 'boolean', required: true, message: '请选择状态', trigger: 'blur' }],
-                    apiGroupLevelFirst_id : [{ type: 'number', required: true, message: '请选择分组', trigger: 'blur'}],
+                    // required : [{ type: 'boolean', required: true, message: '请选择状态', trigger: 'blur' }],
+                    // apiGroupLevelFirst_id : [{ type: 'number', required: true, message: '请选择分组', trigger: 'blur'}],
                 },
                 editForm: {
                     name: "",
@@ -273,14 +273,14 @@
             }
         },
         methods: {
-            checkRequest(){
-                let request = this.form.requestType;
-                if (request==="GET" || request==="DELETE"){
-                    this.request3=false
-                } else {
-                    this.request3=true
-                }
-            },
+            // checkRequest(){
+            //     let request = this.form.requestType;
+            //     if (request==="GET" || request==="DELETE"){
+            //         this.request3=false
+            //     } else {
+            //         this.request3=true
+            //     }
+            // },
             isJsonString(str) {
                 try {
                     if (typeof JSON.parse(str) === "object") {
@@ -328,7 +328,7 @@
                             console.log(_parameter)
                             let params = {
                                 project_id: Number(self.$route.params.project_id),
-                                apiGroupLevelFirst_id: Number(self.form.apiGroupLevelFirst_id),
+                                // apiGroupLevelFirst_id: Number(self.form.apiGroupLevelFirst_id),
                                 name: self.form.name,
                                 httpType: self.form.httpType,
                                 requestType: self.form.requestType,
@@ -347,13 +347,14 @@
                                 Authorization: 'Token ' + JSON.parse(sessionStorage.getItem('token'))
 
                             };
-                            requestAddCase(headers, params).then(_data => {
+                            // requestAddCase(headers, params).then(_data => {
+                            requestAddCase(params).then(_data => {
                                 let {msg, code, data} = _data;
                                 if (code === '999999') {
                                     self.$router.push({name: '分组接口列表',
                                         params: {
                                             project_id: self.$route.params.project_id,
-                                            firstGroup: self.form.apiGroupLevelFirst_id
+                                            // firstGroup: self.form.apiGroupLevelFirst_id
                                         }
                                     });
                                     self.$message({
