@@ -4,22 +4,23 @@
             <el-button class="return-list"><i class="el-icon-d-arrow-left" style="margin-right: 5px"></i>接口列表</el-button>
         </router-link> -->
         <!-- <router-link :to="{ name: '接口列表', params: {project_id: this.$route.params.project_id}}" style='text-decoration: none;color: aliceblue;'> -->
-            <el-button class="return-list" style="float: right">取消</el-button>
+        <!-- <el-button class="return-list" style="float: right">取消</el-button> -->
         <!-- </router-link> -->
-        <el-button class="return-list" type="primary" style="float: right; margin-right: 15px" @click.native="addApiInfo">保存</el-button>
+        <!-- <el-button class="return-list" type="primary" style="float: right; margin-right: 15px z-index:999" @click.native="addApi">保存</el-button> -->
         <el-form :model="form" ref="form" :rules="FormRules">
             <div style="border: 1px solid #e6e6e6;margin-bottom: 10px;padding:15px">
-                <el-row :gutter="10">
+                <el-row :gutter="9" class=topname style="margin-top:10px">
                     <el-col :span='8'>
                         <el-form-item label="接口名称:" label-width="83px" prop="name">
-                            <el-input v-model.trim="form.name" placeholder="名称" auto-complete></el-input>
+                            <el-input v-model.trim="form.name" placeholder="请填写接口名称" auto-complete></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row :gutter="10">
                     <el-col :span="4">
                         <el-form-item label="URL:" label-width="83px">
-                            <el-select v-model="form.requestType"  placeholder="请求方式" @change="checkRequest">
+                            <!-- <el-select v-model="form.requestType"  placeholder="请求方式" @change="checkRequest"> -->
+                            <el-select v-model="form.requestType"  placeholder="请求方式">
                                 <el-option v-for="(item,index) in request" :key="index+''" :label="item.label" :value="item.value"></el-option>
                             </el-select>
                         </el-form-item>
@@ -33,7 +34,7 @@
                     </el-col>
                     <el-col :span='18'>
                         <el-form-item prop="apiAddress">
-                            <el-input v-model.trim="form.apiAddress" placeholder="地址" auto-complete></el-input>
+                            <el-input v-model.trim="form.apiAddress" placeholder="路径地址" auto-complete></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -155,14 +156,18 @@
                                 </template>
                             </el-table-column>
                         </el-table>
+                        
                     </el-collapse-item>
                 </el-collapse>
             </el-row>
         </el-form>
+        <el-button class="return-list" style="margin-top:10px">取消</el-button>
+        <el-button class="return-list" type="primary" @click.native="addApi">保存</el-button>
     </section>
+    
 </template>
 <script>
-    // import { addApiDetail, getApiGroupList } from "../../../api/api";
+    import { requestAddCase } from "../api/api";
 
     export default {
         data() {
@@ -285,132 +290,89 @@
                 }
                 return false;
             },
-            addApiInfo:function(){
-                if (this.form.data&&this.form.mockCode) {
-                    if (!this.isJsonString(this.form.data)) {
-                        this.$message({
-                            message: 'mock格式错误',
-                            center: true,
-                            type: 'error'
-                        })
-                    } else {
-                        this.addApi()
-                    }
-                } else if(this.form.data||this.form.mockCode){
-                    this.$message({
-                        message: 'HTTP状态或mock为空',
-                        center: true,
-                        type: 'warning'
-                    })
-                } else {
-                    this.addApi()
-                }
-            },
-            // addApi: function () {
-            //     this.$refs.form.validate((valid) => {
-            //         if (valid) {
-            //             let self = this;
-            //             console.log(this.form.requestList);
-            //             this.$confirm('确认提交吗？', '提示', {}).then(() => {
-            //                 self.form.parameterType = self.radio;
-            //                 let _type = self.form.parameterType;
-            //                 let _parameter = {};
-            //                 if ( _type === 'form-data') {
-            //                     if ( self.radioType === true) {
-            //                         _type = 'raw';
-            //                         self.form.requestList.forEach((item) => {
-            //                             if (item.name) {
-            //                                 _parameter[item.name] = item.value
-            //                             }
-            //                         });
-            //                         _parameter = JSON.stringify(_parameter)
-            //                     } else {
-            //                         _parameter = self.form.requestList;
-            //                     }
-            //                 } else {
-            //                     _parameter = self.parameterRaw
-            //                 }
-            //                 console.log(_parameter)
-            //                 let params = {
-            //                     project_id: Number(self.$route.params.project_id),
-            //                     apiGroupLevelFirst_id: Number(self.form.apiGroupLevelFirst_id),
-            //                     name: self.form.name,
-            //                     httpType: self.form.httpType,
-            //                     requestType: self.form.requestType,
-            //                     apiAddress: self.form.apiAddress,
-            //                     status: self.form.status,
-            //                     headDict: self.form.headDict,
-            //                     requestParameterType: _type,
-            //                     requestList: _parameter,
-            //                     responseList: self.form.responseList,
-            //                     mockCode: self.form.mockCode,
-            //                     data: self.form.data,
-            //                     description: "",
-            //                 };
-            //                 let headers = {
-            //                     "Content-Type": "application/json",
-            //                     Authorization: 'Token ' + JSON.parse(sessionStorage.getItem('token'))
-
-            //                 };
-            //                 if (self.parameterRaw&&_type==="raw"){
-            //                     if (!self.isJsonString(self.parameterRaw)) {
-            //                         self.$message({
-            //                             message: '源数据格式错误',
-            //                             center: true,
-            //                             type: 'error'
-            //                         })
-            //                     } else {
-            //                         addApiDetail(headers, params).then(_data => {
-            //                             let {msg, code, data} = _data;
-            //                             if (code === '999999') {
-            //                                 self.$router.push({name: '分组接口列表',
-            //                                     params: {
-            //                                         project_id: self.$route.params.project_id,
-            //                                         firstGroup: self.form.apiGroupLevelFirst_id
-            //                                     }
-            //                                 });
-            //                                 self.$message({
-            //                                     message: '保存成功',
-            //                                     center: true,
-            //                                     type: 'success'
-            //                                 })
-            //                             }
-            //                             else {
-            //                                 self.$message.error({
-            //                                     message: msg,
-            //                                     center: true,
-            //                                 })
-            //                             }
-            //                         })
-            //                     }
-            //                 } else {
-            //                     addApiDetail(headers, params).then(_data => {
-            //                         let {msg, code, data} = _data;
-            //                         if (code === '999999') {
-            //                             self.$router.push({name: '分组接口列表',
-            //                                 params: {
-            //                                     project_id: self.$route.params.project_id,
-            //                                     firstGroup: self.form.apiGroupLevelFirst_id
-            //                                 }
-            //                             });
-            //                             self.$message({
-            //                                 message: '保存成功',
-            //                                 center: true,
-            //                                 type: 'success'
-            //                             })
-            //                         }
-            //                         else {
-            //                             self.$message.error({
-            //                                 message: msg,
-            //                                 center: true,
-            //                             })
-            //                         }
-            //                     })
-            //                 }
+            // addApiInfo:function(){
+            //     if (this.form.data&&this.form.mockCode) {
+            //         if (!this.isJsonString(this.form.data)) {
+            //             this.$message({
+            //                 message: 'mock格式错误',
+            //                 center: true,
+            //                 type: 'error'
             //             })
+            //         } else {
+            //             this.addApi()
             //         }
-            //     })
+            //     } else if(this.form.data||this.form.mockCode){
+            //         this.$message({
+            //             message: 'HTTP状态或mock为空',
+            //             center: true,
+            //             type: 'warning'
+            //         })
+            //     } else {
+            //         this.addApi()
+            //     }
             // },
+
+            addApi: function () {
+                this.$refs.form.validate((valid) => {
+                    if (valid) {
+                        let self = this;
+                        console.log(this.form.requestList);
+                        this.$confirm('确认提交吗？', '提示', {}).then(() => {
+                            let _parameter = {};
+                            self.form.requestList.forEach((item) => {
+                                if (item.name) {
+                                    _parameter[item.name] = item.value
+                                }
+                            });
+                            _parameter = JSON.stringify(_parameter)
+                            console.log(_parameter)
+                            let params = {
+                                project_id: Number(self.$route.params.project_id),
+                                apiGroupLevelFirst_id: Number(self.form.apiGroupLevelFirst_id),
+                                name: self.form.name,
+                                httpType: self.form.httpType,
+                                requestType: self.form.requestType,
+                                apiAddress: self.form.apiAddress,
+                                status: self.form.status,
+                                headDict: self.form.headDict,
+                                // requestParameterType: _type,
+                                requestList: _parameter,
+                                responseList: self.form.responseList,
+                                mockCode: self.form.mockCode,
+                                data: self.form.data,
+                                description: "",
+                            };
+                            let headers = {
+                                "Content-Type": "application/json",
+                                Authorization: 'Token ' + JSON.parse(sessionStorage.getItem('token'))
+
+                            };
+                            requestAddCase(headers, params).then(_data => {
+                                let {msg, code, data} = _data;
+                                if (code === '999999') {
+                                    self.$router.push({name: '分组接口列表',
+                                        params: {
+                                            project_id: self.$route.params.project_id,
+                                            firstGroup: self.form.apiGroupLevelFirst_id
+                                        }
+                                    });
+                                    self.$message({
+                                        message: '保存成功',
+                                        center: true,
+                                        type: 'success'
+                                    })
+                                }
+                                else {
+                                    self.$message.error({
+                                        message: msg,
+                                        center: true,
+                                    })
+                                }
+                            })
+                        })
+                    }
+                })
+            },
             editParameterSubmit: function () {
                 this.$refs.editForm.validate((valid) => {
                     if (valid) {
@@ -585,3 +547,4 @@
         }
     }
 </style>
+
