@@ -184,10 +184,10 @@
                 checkParameterList: [],
                 ParameterTyep: true,
                 group: [],
-                radio: "form-data",
+                // radio: "form-data",
                 secondGroup: [],
-                status: [{value: true, label: '启用'},
-                    {value: false, label: '禁用'}],
+                // status: [{value: true, label: '启用'},
+                //     {value: false, label: '禁用'}],
                 header: [{value: 'Accept', label: 'Accept'},
                     {value: 'Accept-Charset', label: 'Accept-Charset'},
                     {value: 'Accept-Encoding', label: 'Accept-Encoding'},
@@ -249,7 +249,7 @@
                         {name: "", value: ""}],
                     requestList: [{name: "", value: "", _type:"String", required: true, restrict: "", description: ""},
                         {name: "", value: "", _type:"String", required: true, restrict: "", description: ""}],
-                    requestParameterType: "",
+                    // requestParameterType: "",
                     responseList: [{name: "", value: "", _type:"String", required:true, description: ""},
                         {name: "", value: "", _type:"String", required:true, description: ""}],
                     // mockCode: '',
@@ -316,7 +316,7 @@
                 this.$refs.form.validate((valid) => {
                     if (valid) {
                         let self = this;
-                        console.log(this.form.requestList);
+                        // console.log(this.form.requestList);
                         this.$confirm('确认提交吗？', '提示', {}).then(() => {
                             let _parameter = {};
                             self.form.requestList.forEach((item) => {
@@ -325,23 +325,24 @@
                                 }
                             });
                             _parameter = JSON.stringify(_parameter)
-                            console.log(_parameter)
+                            // console.log(_parameter)
                             let params = {
-                                project_id: Number(self.$route.params.project_id),
+                                // project_id: Number(self.$route.params.project_id),
                                 // apiGroupLevelFirst_id: Number(self.form.apiGroupLevelFirst_id),
                                 name: self.form.name,
                                 httpType: self.form.httpType,
                                 requestType: self.form.requestType,
                                 apiAddress: self.form.apiAddress,
-                                status: self.form.status,
+                                // status: self.form.status,
                                 headDict: self.form.headDict,
                                 // requestParameterType: _type,
                                 requestList: _parameter,
                                 responseList: self.form.responseList,
-                                mockCode: self.form.mockCode,
-                                data: self.form.data,
+                                // mockCode: self.form.mockCode,
+                                // data: self.form.data,
                                 description: "",
                             };
+                            console.log(params)
                             let headers = {
                                 "Content-Type": "application/json",
                                 Authorization: 'Token ' + JSON.parse(sessionStorage.getItem('token'))
@@ -353,7 +354,7 @@
                                 if (code === '999999') {
                                     self.$router.push({name: '分组接口列表',
                                         params: {
-                                            project_id: self.$route.params.project_id,
+                                            // project_id: self.$route.params.project_id,
                                             // firstGroup: self.form.apiGroupLevelFirst_id
                                         }
                                     });

@@ -43,37 +43,39 @@ class AddCase(APIView):
         #         return JsonResponse(code="999998", msg="失败")
 
         data = JSONParser().parse(request)
-        obj = Project.objects.get(id=data["project_id"])
-        api_name = ApiInfo.objects.filter(name=data["name"],project=data["project_id"])
-        if len(api_name):
-            return JsonResponse(code="999997", msg="用例名已存在，请更改")
-        else:
-            with transaction.atomic(): # 执行错误后，帮助事务回滚
-                serialize = ApiInfoDeserializer(data=data)
-                if serialize.is_valid():
-                    api_id = serialize.data.get("id")
-                    if len(data.get("headDict")):
-                        for i in data["headDict"]:
+        # obj = Project.objects.get(id=data["project_id"])
+        # api_name = ApiInfo.objects.filter(name=data["name"],project=data["project_id"])  # 没有传递project id 过来
+        # if len(api_name):
+        #     return JsonResponse(code="999997", msg="用例名已存在，请更改")
+        # else:
+        with transaction.atomic(): # 执行错误后，帮助事务回滚
+            serialize = ApiInfoDeserializer(data=data)
+            print(serialize)
+            if serialize.is_valid():
+                api_id = serialize.data.get("id")
+                if len(data.get("headDict")):
+                    for i in data["headDict"]:
+                        i["api"] = api_id
+                        head_serialize = ApiHeadDeserializer(data=i)
+                        if head_serialize.is_valid():
+                            head_serialize.save(api=ApiInfo.objects.get(id=api_id))
+                if len(data.get("requestList")):
+                    for i in data["requestList"]:
+                        if i.get("name"):
                             i["api"] = api_id
-                            head_serialize = ApiHeadDeserializer(data=i)
-                            if head_serialize.is_valid():
-                                head_serialize.save(api=ApiInfo.objects.get(id=api_id))
-                    if len(data.get("requestList")):
-                        for i in data["requestList"]:
-                            if i.get("name"):
-                                i["api"] = api_id
-                                param_serialize = ApiParameterDeserializer(data=i)
-                                if param_serialize.is_valid():
-                                    param_serialize.save(api=ApiInfo.objects.get(id=api_id))
-                    if len(data.get("responseList")):
-                        for i in data["responseList"]:
-                            if i.get("name"):
-                                i["api"] = api_id
-                                response_serialize = ApiResponseDeserializer(data=i)
-                                if response_serialize.is_valid():
-                                    response_serialize.save(api=ApiInfo.objects.get(id=api_id))
-                    return JsonResponse(code="999999", msg="成功!", data={"api_id": api_id})
-                return JsonResponse(code="999996", msg="参数有误!")
+                            param_serialize = ApiParameterDeserializer(data=i)
+                            if param_serialize.is_valid():
+                                param_serialize.save(api=ApiInfo.objects.get(id=api_id))
+                if len(data.get("responseList")):
+                    for i in data["responseList"]:
+                        if i.get("name"):
+                            i["api"] = api_id
+                            response_serialize = ApiResponseDeserializer(data=i)
+                            if response_serialize.is_valid():
+                                response_serialize.save(api=ApiInfo.objects.get(id=api_id))
+                return JsonResponse(code="999999", msg="成功!", data={"api_id": api_id})
+            print(serialize.errors)
+            return JsonResponse(code="999996", msg="参数有误!")
 
 
 class GetCase(APIView):

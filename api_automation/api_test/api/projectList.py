@@ -14,8 +14,7 @@ from rest_framework.views import APIView
 
 from api_test.common.api_response import JsonResponse
 from api_test.models import Project
-from api_test.serializers import ProjectSerializer, ProjectDeserializer, \
-    ProjectMemberDeserializer
+from api_test.serializers import ProjectDeserializer, ProjectSerializer, ProjectMemberDeserializer
 
 logger = logging.getLogger(__name__)  # 这里使用 __name__ 动态搜索定义的 logger 配置，这里有一个层次关系的知识点。
 
