@@ -78,7 +78,7 @@
                                 <el-col v-if="request3" :span="16"><el-checkbox v-model="radioType" label="3" v-show="ParameterTyep">表单转源数据</el-checkbox></el-col>
                             </el-row>
                         </div> -->
-                        <el-table :data="form.requestList" highlight-current-row :class="ParameterTyep? 'parameter-a': 'parameter-b'">
+                        <el-table :data="form.requestList" highlight-current-row class=parameter-a>
                             <el-table-column prop="name" label="参数名" min-width="25%" sortable>
                                 <template slot-scope="scope">
                                     <el-input v-model.trim="scope.row.name" :value="scope.row.name" placeholder="请输入参数值"></el-input>
@@ -114,9 +114,9 @@
                                 </template>
                             </el-table-column>
                         </el-table>
-                        <template>
-                            <el-input :class="ParameterTyep? 'parameter-b': 'parameter-a'" type="textarea" :rows="5" placeholder="请输入内容" v-model.trim="parameterRaw"></el-input>
-                        </template>
+                        <!-- <template>
+                            <el-input :class=parameter-b type="textarea" :rows="5" placeholder="请输入内容" v-model.trim="parameterRaw"></el-input>
+                        </template> -->
                     </el-collapse-item>
                     <el-collapse-item title="返回参数" name="3">
                         <el-table :data="form.responseList" highlight-current-row>
@@ -184,7 +184,7 @@
                 checkParameterList: [],
                 ParameterTyep: true,
                 group: [],
-                // radio: "form-data",
+                radio: "form-data",
                 secondGroup: [],
                 // status: [{value: true, label: '启用'},
                 //     {value: false, label: '禁用'}],
@@ -236,8 +236,8 @@
                 result: true,
                 activeNames: ['1', '2', '3', '4'],
                 id: "",
-                parameterRaw: "",
-                // request3: true,
+                // parameterRaw: "",
+                request3: false,
                 form: {
                     // apiGroupLevelFirst_id: '',
                     name: '',
@@ -273,58 +273,16 @@
             }
         },
         methods: {
-            // checkRequest(){
-            //     let request = this.form.requestType;
-            //     if (request==="GET" || request==="DELETE"){
-            //         this.request3=false
-            //     } else {
-            //         this.request3=true
-            //     }
-            // },
-            isJsonString(str) {
-                try {
-                    if (typeof JSON.parse(str) === "object") {
-                        return true;
-                    }
-                } catch(e) {
-                }
-                return false;
-            },
-            // addApiInfo:function(){
-            //     if (this.form.data&&this.form.mockCode) {
-            //         if (!this.isJsonString(this.form.data)) {
-            //             this.$message({
-            //                 message: 'mock格式错误',
-            //                 center: true,
-            //                 type: 'error'
-            //             })
-            //         } else {
-            //             this.addApi()
-            //         }
-            //     } else if(this.form.data||this.form.mockCode){
-            //         this.$message({
-            //             message: 'HTTP状态或mock为空',
-            //             center: true,
-            //             type: 'warning'
-            //         })
-            //     } else {
-            //         this.addApi()
-            //     }
-            // },
-
             addApi: function () {
                 this.$refs.form.validate((valid) => {
                     if (valid) {
                         let self = this;
-                        // console.log(this.form.requestList);
+                        console.log(this.form.requestList);
                         this.$confirm('确认提交吗？', '提示', {}).then(() => {
                             let _parameter = {};
-                            self.form.requestList.forEach((item) => {
-                                if (item.name) {
-                                    _parameter[item.name] = item.value
-                                }
-                            });
-                            _parameter = JSON.stringify(_parameter)
+                            _parameter = this.form.requestList;
+                            console.log(_parameter)
+                            // _parameter = JSON.stringify(_parameter)
                             // console.log(_parameter)
                             let params = {
                                 // project_id: Number(self.$route.params.project_id),
@@ -342,22 +300,16 @@
                                 // data: self.form.data,
                                 description: "",
                             };
-                            console.log(params)
+                            console.log(_parameter)
                             let headers = {
                                 "Content-Type": "application/json",
-                                Authorization: 'Token ' + JSON.parse(sessionStorage.getItem('token'))
-
+                                // Authorization: 'Token ' + JSON.parse(sessionStorage.getItem('token'))
                             };
                             // requestAddCase(headers, params).then(_data => {
                             requestAddCase(params).then(_data => {
                                 let {msg, code, data} = _data;
                                 if (code === '999999') {
-                                    self.$router.push({name: '分组接口列表',
-                                        params: {
-                                            // project_id: self.$route.params.project_id,
-                                            // firstGroup: self.form.apiGroupLevelFirst_id
-                                        }
-                                    });
+                                    self.$router.push("/project/case_list");
                                     self.$message({
                                         message: '保存成功',
                                         center: true,
@@ -375,56 +327,7 @@
                     }
                 })
             },
-            editParameterSubmit: function () {
-                this.$refs.editForm.validate((valid) => {
-                    if (valid) {
-                        this.form.requestList[this.id] = this.editForm;
-                        this.addParameterFormVisible = false
-                    }
-                })
-            },
-            handleParameterEdit: function (index, row) {
-                this.addParameterFormVisible = true;
-                this.id = index;
-                this.editForm = Object.assign({}, row);
-            },
-            editResponseSubmit: function () {
-                this.$refs.editForm.validate((valid) => {
-                    if (valid) {
-                        this.form.responseList[this.id] = this.editForm;
-                        this.addResponseFormVisible = false
-                    }
-                })
-            },
-            handleResponseEdit: function (index, row) {
-                this.addResponseFormVisible = true;
-                this.id = index;
-                this.editForm = Object.assign({}, row);
-            },
-            // 获取api分组
-            // getApiGroup() {
-            //     let self = this;
-            //     let params = {
-            //         project_id: this.$route.params.project_id
-            //     };
-            //     let headers = {
-            //         "Content-Type": "application/json",
-            //         Authorization: 'Token '+JSON.parse(sessionStorage.getItem('token'))
-            //     };
-            //     getApiGroupList(headers, params).then(_data => {
-            //         let {msg, code, data} = _data;
-            //         if (code === '999999') {
-            //             self.group = data;
-            //             self.form.apiGroupLevelFirst_id = self.group[0].id
-            //         }
-            //         else {
-            //             self.$message.error({
-            //                 message: msg,
-            //                 center: true,
-            //             })
-            //         }
-            //     })
-            // },
+            
             addHead() {
                 let headers = {name: "", value: ""};
                 this.form.headDict.push(headers)
@@ -455,62 +358,46 @@
                     this.form.responseList.push({name: "", value: "", _type:"String", required:true, description: ""})
                 }
             },
-            changeParameterType() {
-                if (this.radio === 'form-data') {
-                    this.ParameterTyep = true
-                } else {
-                    this.ParameterTyep = false
-                }
-            },
-            showData() {
-                this.result = true
-            },
-            showHead(){
-                this.result = false
-            },
             handleChange(val) {
             },
             onSubmit() {
                 console.log('submit!');
             },
-            fastAdd() {
-                let form = this.$route.params.formData;
-                let _type = this.$route.params._type;
-                let _typeData = this.$route.params._typeData;
-                if (form) {
-                    this.form.requestList = [];
-                    this.form.requestType = form.request4.toUpperCase();
-                    this.form.httpType = form.Http4;
-                    this.form.apiAddress = form.addr;
-                    this.form.headDict = form.head;
-                    this.form.parameterRaw = form.parameterRaw;
-                    form.parameter.forEach((item) => {
-                        item['_type'] = 'String';
-                        item['required'] = true;
-                        item['restrict'] = '';
-                        item['description'] = '';
-                        this.form.requestList.push(item)
-                    });
-                    // this.form.parameter = form.parameter;
-                    this.form.mockCode = form.statusCode;
-                    this.form.data = JSON.stringify(form.resultData)
-                }
-                if (_type) {
-                    this.radio = _type
-                }
-                if (_typeData) {
-                    this.radioType = _typeData
-                }
-            }
-        },
-        watch: {
-            radio() {
-                this.changeParameterType()
-            },
+        //     fastAdd() {
+        //         let form = this.$route.params.formData;
+        //         let _type = this.$route.params._type;
+        //         let _typeData = this.$route.params._typeData;
+        //         console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        //         console.log(form)
+        //         if (form) {
+        //             this.form.requestList = [];
+        //             this.form.requestType = form.request4.toUpperCase();
+        //             this.form.httpType = form.Http4;
+        //             this.form.apiAddress = form.addr;
+        //             this.form.headDict = form.head;
+        //             // this.form.parameterRaw = form.parameterRaw;
+        //             form.parameter.forEach((item) => {
+        //                 item['_type'] = 'String';
+        //                 item['required'] = true;
+        //                 item['restrict'] = '';
+        //                 item['description'] = '';
+        //                 this.form.requestList.push(item)
+        //             });
+        //             this.form.parameter = form.parameter;
+        //             this.form.mockCode = form.statusCode;
+        //             this.form.data = JSON.stringify(form.resultData)
+        //         }
+        //         if (_type) {
+        //             this.radio = _type
+        //         }
+        //         if (_typeData) {
+        //             this.radioType = _typeData
+        //         }
+        //     }
         },
         mounted() {
             // this.getApiGroup();
-            this.fastAdd();
+            // this.fastAdd();
         }
     }
 </script>

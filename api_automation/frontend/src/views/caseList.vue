@@ -6,7 +6,7 @@
       <el-table-column prop="name" label="用例名" width="180"></el-table-column>
       <el-table-column prop="httpType" label="http/https" width="180"></el-table-column>
       <el-table-column prop="requestType" label="请求方式" width="180"></el-table-column>
-      <el-table-column prop="caseAddress" label="用例接口地址" width="180"></el-table-column>
+      <el-table-column prop="apiAddress" label="用例接口地址" width="180"></el-table-column>
       <el-table-column fixed="right" label="操作">
         <template slot-scope="scope">
           <el-button type="text" size="small">编辑</el-button>

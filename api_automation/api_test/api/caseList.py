@@ -60,6 +60,8 @@ class AddCase(APIView):
                         if head_serialize.is_valid():
                             head_serialize.save(api=ApiInfo.objects.get(id=api_id))
                 if len(data.get("requestList")):
+                    print("###################")
+                    print(type(data["requestList"]))
                     for i in data["requestList"]:
                         if i.get("name"):
                             i["api"] = api_id
@@ -91,11 +93,11 @@ class GetCase(APIView):
             page = int(request.GET.get("page", 1))
         except (TypeError, ValueError):
             return JsonResponse(code="999985", msg="page and page_size must be integer!")
-        obi = CaseInfo.objects.all().order_by("id")
+        obi = ApiInfo.objects.all().order_by("id")
         paginator = Paginator(obi, page_size)  # paginator对象
         total = paginator.num_pages  # 总页数
         obm = paginator.page(page)
-        serialize = CaseSerializer(obm, many=True)
+        serialize = ApiInfoDeserializer(obm, many=True)
         return JsonResponse(data={"data": serialize.data,
                                   "page": page,
                                   "total": total

@@ -220,7 +220,7 @@ class ApiInfoSerializer(serializers.ModelSerializer):
     """
     接口详细信息序列化
     """
-    lastUpdateTime = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", required=False, read_only=True)
+    # lastUpdateTime = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", required=False, read_only=True)
     headers = ApiHeadSerializer(many=True, read_only=True)
     requestParameter = ApiParameterSerializer(many=True, read_only=True)
     response = ApiResponseSerializer(many=True, read_only=True)
