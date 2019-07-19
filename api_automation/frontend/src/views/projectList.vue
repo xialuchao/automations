@@ -1,6 +1,6 @@
 <template>
   <div class="projectList">
-
+    
     <listbody label1="项目名称" label2="版本" label3="类型" label4="描述" listname="project"></listbody>
   </div>
 </template>

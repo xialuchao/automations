@@ -3,16 +3,19 @@
         <div style="margin: 20px;"></div>
         <el-form :label-position="labelPosition" label-width="130px" :model="formLabelAlign">
         <el-form-item label="项目名称">
-            <el-input v-model="formLabelAlign.name"></el-input>
+            <el-input style="width:600px;" v-model="formLabelAlign.name"></el-input>
         </el-form-item>
         <el-form-item label="版本号">
-            <el-input v-model="formLabelAlign.version"></el-input>
+            <el-input style="width:600px;" v-model="formLabelAlign.version"></el-input>
         </el-form-item>
         <el-form-item label="类型">
-            <el-input v-model="formLabelAlign.type"></el-input>
+            <el-select style="width:600px;" v-model="formLabelAlign.type" placeholder="请选择项目类型">
+                <el-option label="WEB" value="Web"></el-option>
+                <el-option label="APP" value="App"></el-option>
+            </el-select>
         </el-form-item>
         <el-form-item label="描述">
-            <el-input v-model="formLabelAlign.description"></el-input>
+            <el-input style="width:600px;" v-model="formLabelAlign.description"></el-input>
         </el-form-item>
         </el-form>
         <el-button class="createbtn" type="primary" round @click="root">取    消</el-button>

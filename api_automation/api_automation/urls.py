@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from api_test.api.projectList import ProjectList, AddProject, DelProject
-from api_test.api.caseList import AddCase, GetCase
+from api_test.api.caseList import AddCase, GetCase, DelCase
 from api_test.api import user
 
 urlpatterns = [
@@ -28,7 +28,7 @@ urlpatterns = [
     path('project/del', DelProject.as_view()),
     path('case/add', AddCase.as_view()),
     path('case/get', GetCase.as_view()),
-    
+    path('api/del', DelCase.as_view())
 ]
 
     

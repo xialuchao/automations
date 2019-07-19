@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { requestProjectList, requestDelProject, requestCaseList} from '../api/api';
+import { requestProjectList, requestDelProject, requestCaseList, requestDelCase} from '../api/api';
 export default {
   name: 'listbody',
   data () {
@@ -32,7 +32,7 @@ export default {
       {
         let self = this;
         let params = {ids: row.id + ''}
-          requestDelProject(params).then(_data => {
+          requestDelCase(params).then(_data => {
             console.log(_data)
               let { msg, code, data } = _data;
               if (code === '999999') {
@@ -47,7 +47,7 @@ export default {
                       center: true,
                   })
               }
-              self.getProjectList()
+              self.getcaseList()
           });
       })
   },

@@ -14,11 +14,10 @@ from rest_framework.utils import json
 from rest_framework.views import APIView
 
 from api_test.common.api_response import JsonResponse
-from api_test.models import CaseInfo, ApiInfo
-from api_test.serializers import CaseSerializer, ApiInfoSerializer, ApiInfoDeserializer, ApiGroupLevelFirstSerializer, ApiInfoSerializer, APIRequestHistorySerializer, \
-    ApiOperationHistorySerializer, ApiInfoListSerializer, ApiInfoDocSerializer, ApiGroupLevelFirstDeserializer, \
-    ApiInfoDeserializer, ApiHeadDeserializer, ApiParameterDeserializer, \
-    ApiResponseDeserializer, APIRequestHistoryDeserializer, ProjectSerializer
+from api_test.models import ApiInfo
+from api_test.serializers import  ApiInfoSerializer, ApiInfoDeserializer,  ApiInfoSerializer,\
+    ApiInfoListSerializer, ApiHeadDeserializer, ApiParameterDeserializer, \
+    ApiResponseDeserializer, ProjectSerializer
 
 logger = logging.getLogger(__name__)  # 这里使用 __name__ 动态搜索定义的 logger 配置，这里有一个层次关系的知识点。
 
@@ -50,8 +49,10 @@ class AddCase(APIView):
         # else:
         with transaction.atomic(): # 执行错误后，帮助事务回滚
             serialize = ApiInfoDeserializer(data=data)
-            print(serialize)
+            # print(serialize)
             if serialize.is_valid():
+                serialize.save()
+                # print(serialize.validated_data)
                 api_id = serialize.data.get("id")
                 if len(data.get("headDict")):
                     for i in data["headDict"]:
@@ -60,8 +61,8 @@ class AddCase(APIView):
                         if head_serialize.is_valid():
                             head_serialize.save(api=ApiInfo.objects.get(id=api_id))
                 if len(data.get("requestList")):
-                    print("###################")
-                    print(type(data["requestList"]))
+                    # print("###################")
+                    # print(type(data["requestList"]))
                     for i in data["requestList"]:
                         if i.get("name"):
                             i["api"] = api_id
@@ -102,3 +103,18 @@ class GetCase(APIView):
                                   "page": page,
                                   "total": total
                                   }, code="999999", msg="成功")
+
+
+class DelCase(APIView):
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = ()
+
+    def delete(self, request):
+        """
+        删除用例接口
+        """
+        data = JSONParser().parse(request)
+        j = data["ids"]
+        obj = ApiInfo.objects.filter(id=j)
+        obj.delete()
+        return JsonResponse(code="999999", msg="成功")

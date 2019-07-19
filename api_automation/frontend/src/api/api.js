@@ -13,5 +13,7 @@ export const requestDelProject = params => {return axios.delete(`${test}/project
 export const requestAddCase = params => {return axios.post(`${test}/case/add`, params).then(res => res.data); };
 // 查询所有接口
 export const requestCaseList = params => {return axios.get(`${test}/case/get`, params).then(res =>res.data); };
+// 删除接口
+export const requestDelCase = params => {return axios.delete(`${test}/api/del`, {data: params}).then(res => res.data); };
 
 
