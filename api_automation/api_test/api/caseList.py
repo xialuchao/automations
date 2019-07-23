@@ -13,6 +13,7 @@ from rest_framework.response import Response
 from rest_framework.utils import json
 from rest_framework.views import APIView
 
+from api_test.api.apiRun import apiRun
 from api_test.common.api_response import JsonResponse
 from api_test.models import ApiInfo
 from api_test.serializers import  ApiInfoSerializer, ApiInfoDeserializer,  ApiInfoSerializer,\
@@ -115,6 +116,26 @@ class DelCase(APIView):
         """
         data = JSONParser().parse(request)
         j = data["ids"]
-        obj = ApiInfo.objects.filter(id=j)
-        obj.delete()
+        obj1 = ApiInfo.objects.filter(id=j)
+        obj1.delete()
         return JsonResponse(code="999999", msg="成功")
+
+
+class RunSingleAPI(APIView):
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = ()
+
+    def post(self, request):
+        """
+        运行单接口
+        """
+        datad = JSONParser().parse(request)
+        try:
+            resu = apiRun(httpType=datad['httpType'], headers=datad['headDict'], data=datad['requestList'], path=datad['apiAddress'])
+            print("111111111111111111111111111111")
+            print(resu.text)
+        except Exception as e:
+            print(e)
+            return JsonResponse(code="999998", msg="失败！")
+        return JsonResponse(code="999999", msg="成功！")
+

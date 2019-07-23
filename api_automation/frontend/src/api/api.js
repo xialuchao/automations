@@ -15,5 +15,6 @@ export const requestAddCase = params => {return axios.post(`${test}/case/add`, p
 export const requestCaseList = params => {return axios.get(`${test}/case/get`, params).then(res =>res.data); };
 // 删除接口
 export const requestDelCase = params => {return axios.delete(`${test}/api/del`, {data: params}).then(res => res.data); };
-
+// 单接口执行
+export const requestSingleAPI = params => {return axios.post(`${test}/api/singlerun`, params).then(res => res.data); };
 
